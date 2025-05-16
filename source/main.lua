@@ -19,6 +19,7 @@ playerSprite:add()
 local obstacleSpeed = 5
 local obstacleImage = gfx.image.new("images/rock")
 local obstacleSprite = gfx.sprite.new(obstacleImage)
+obstacleSprite.collisionResponse = gfx.sprite.kCollisionTypeOverlap
 obstacleSprite:setCollideRect(collisionOffset, collisionOffset, obstacleSprite.width - (collisionOffset*2), obstacleSprite.height - (collisionOffset*2))
 obstacleSprite:moveTo(450, 240)
 obstacleSprite:add()
@@ -64,8 +65,11 @@ function UpdatePlayer()
 end
 
 function UpdateObstacle()
-    obstacleSprite:moveBy(-obstacleSpeed, 0)
+    local actualX, actualY, collisions, collisionLength = obstacleSprite:moveWithCollisions(obstacleSprite.x - obstacleSpeed, obstacleSprite.y)
     if obstacleSprite.x < -20 then
         obstacleSprite:moveTo(450, math.random(40, 200))
+    end
+    if collisionLength > 0 then
+        gameState = State.STOPPED
     end
 end
