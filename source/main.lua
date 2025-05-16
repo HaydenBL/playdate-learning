@@ -16,7 +16,8 @@ playerSprite:moveTo(playerStartX, playerStartY)
 playerSprite:add()
 
 -- Obstacle
-local obstacleSpeed = 5
+local obstacleStartSpeed = 5
+local obstacleSpeed = obstacleStartSpeed
 local obstacleImage = gfx.image.new("images/rock")
 local obstacleSprite = gfx.sprite.new(obstacleImage)
 obstacleSprite.collisionResponse = gfx.sprite.kCollisionTypeOverlap
@@ -30,6 +31,7 @@ local State = {
     ACTIVE = 1
 }
 local gameState = State.STOPPED
+local score = 0
 
 function pd.update()
     gfx.sprite.update()
@@ -43,12 +45,15 @@ function pd.update()
     elseif gameState == State.ACTIVE then
         UpdatePlayer()
         UpdateObstacle()
-    end    
+    end
+    DrawScore()
 end
 
 function ResetGameState()
     playerSprite:moveTo(playerStartX, playerStartY)
     obstacleSprite:moveTo(450, math.random(40, 200))
+    score = 0
+    obstacleSpeed = obstacleStartSpeed
 end
 
 function UpdatePlayer()
@@ -68,8 +73,18 @@ function UpdateObstacle()
     local actualX, actualY, collisions, collisionLength = obstacleSprite:moveWithCollisions(obstacleSprite.x - obstacleSpeed, obstacleSprite.y)
     if obstacleSprite.x < -20 then
         obstacleSprite:moveTo(450, math.random(40, 200))
+        PointScored()
     end
     if collisionLength > 0 then
         gameState = State.STOPPED
     end
+end
+
+function PointScored()
+    score += 1
+    obstacleSpeed += 0.2
+end
+
+function DrawScore()
+    gfx.drawTextAligned("Score: " .. score, 390, 10, kTextAlignment.right)
 end
