@@ -1,6 +1,6 @@
-name=Learning Game
+name=Learning Capybara Game
 author=Hayden Blaise Lueck
-description=
-bundleID=
+description=Breakthrough gaming experience
+bundleID=se.haydenblai.capybara
 version=1.0.0
 buildNumber=1
