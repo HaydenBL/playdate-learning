@@ -15,6 +15,14 @@ playerSprite:setCollideRect(collisionOffset, collisionOffset, playerSprite.width
 playerSprite:moveTo(playerStartX, playerStartY)
 playerSprite:add()
 
+-- Obstacle
+local obstacleSpeed = 5
+local obstacleImage = gfx.image.new("images/rock")
+local obstacleSprite = gfx.sprite.new(obstacleImage)
+obstacleSprite:setCollideRect(collisionOffset, collisionOffset, obstacleSprite.width - (collisionOffset*2), obstacleSprite.height - (collisionOffset*2))
+obstacleSprite:moveTo(450, 240)
+obstacleSprite:add()
+
 -- Game state
 local State = {
     STOPPED = 0,
@@ -33,11 +41,13 @@ function pd.update()
         end
     elseif gameState == State.ACTIVE then
         UpdatePlayer()
+        UpdateObstacle()
     end    
 end
 
 function ResetGameState()
     playerSprite:moveTo(playerStartX, playerStartY)
+    obstacleSprite:moveTo(450, math.random(40, 200))
 end
 
 function UpdatePlayer()
@@ -50,5 +60,12 @@ function UpdatePlayer()
 
     if playerSprite.y > 270 or playerSprite.y < -30 then
         gameState = State.STOPPED
+    end
+end
+
+function UpdateObstacle()
+    obstacleSprite:moveBy(-obstacleSpeed, 0)
+    if obstacleSprite.x < -20 then
+        obstacleSprite:moveTo(450, math.random(40, 200))
     end
 end
