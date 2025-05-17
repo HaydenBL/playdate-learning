@@ -3,6 +3,12 @@ import "CoreLibs/graphics"
 local pd = playdate
 local gfx = pd.graphics
 
+local fontPathsNontendo = {
+    [playdate.graphics.font.kVariantNormal] = "fonts/Nontendo/Nontendo-Light",
+    [playdate.graphics.font.kVariantBold] = "fonts/Nontendo/Nontendo-Bold"
+}
+local fontNontendo = gfx.font.newFamily(fontPathsNontendo)
+
 -- drawTextScaled yoinked from https://devforum.play.date/t/add-a-drawtextscaled-api-see-code-example/7108
 -- idk if this was added to the API since?
 function playdate.graphics.drawTextScaled(text, x, y, scale, font)
@@ -30,19 +36,20 @@ local function map(n, start1, stop1, start2, stop2)
     end
 end
 
-local function drawToTextWheel(text, offsetDegrees)
+local function drawToTextWheel(text, offsetDegrees, selected)
     local w, h = playdate.display.getSize()
     local crankPosition = pd.getCrankPosition() + offsetDegrees
     local crankRads = (crankPosition) * (math.pi/180)
     local scale = map(math.sin(crankRads), -1, 1, 0.8, 6)
     local height = map(math.cos(crankRads), -1, 1, 20, 220)
-    gfx.drawTextScaled(text, w/2, height, scale, gfx.getSystemFont())
+    local variant = selected and gfx.font.kVariantBold or gfx.font.kVariantNormal
+    gfx.drawTextScaled(text, w/2, height, scale, fontNontendo[variant])
 end
 
 function pd.update()
     gfx.clear()
 
-    drawToTextWheel("knack 3", 90)
+    drawToTextWheel("knack 3", 90, true)
     drawToTextWheel("knack 4", 180)
     drawToTextWheel("knack 5", 270)
     drawToTextWheel("knack 6", 0)
