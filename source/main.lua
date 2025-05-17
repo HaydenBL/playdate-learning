@@ -71,19 +71,19 @@ local function getClosestIndexToScreen()
     return math.round((numberOfTexts * relativeAngle) / 360) % numberOfTexts + 1
 end
 
-function pd.update()
-    gfx.clear()
-
+function pd.cranked(change, acceleratedChange)
     local newActiveIndex = getClosestIndexToScreen()
     if newActiveIndex ~= activeIndex then
         activeIndex = newActiveIndex
         clickPlayer:play()
-        print(activeIndex, getTextRotationPosition(activeIndex))
     end
-    -- print(getTextRotationPosition(1), getTextRotationPosition(2), getTextRotationPosition(3), getTextRotationPosition(4), getTextRotationPosition(5), activeIndex)
+end
+
+function pd.update()
+    gfx.clear()
 
     for i, v in ipairs(texts) do
         drawToTextWheel(v, getTextRotationPosition(i), i == activeIndex)
     end
-    
+
 end
