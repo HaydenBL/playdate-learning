@@ -9,6 +9,14 @@ local fontPathsNontendo = {
 }
 local fontNontendo = gfx.font.newFamily(fontPathsNontendo)
 
+local activeIndex = 1;
+local texts = {
+    "Knack 3",
+    "Knack 4",
+    "Knack 5",
+    "Knack 6"
+}
+
 -- drawTextScaled yoinked from https://devforum.play.date/t/add-a-drawtextscaled-api-see-code-example/7108
 -- idk if this was added to the API since?
 function playdate.graphics.drawTextScaled(text, x, y, scale, font)
@@ -49,8 +57,11 @@ end
 function pd.update()
     gfx.clear()
 
-    drawToTextWheel("knack 3", 90, true)
-    drawToTextWheel("knack 4", 180)
-    drawToTextWheel("knack 5", 270)
-    drawToTextWheel("knack 6", 0)
+    for i, v in ipairs(texts) do
+        drawToTextWheel(v, i*90, i == activeIndex)
+    end
+    
+    -- drawToTextWheel("knack 4", 180)
+    -- drawToTextWheel("knack 5", 270)
+    -- drawToTextWheel("knack 6", 0)
 end
