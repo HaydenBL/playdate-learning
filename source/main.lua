@@ -34,7 +34,7 @@ function pd.update()
 
     local w, h = playdate.display.getSize()
     local crankPosition = pd.getCrankPosition()
-    local crankRads = (crankPosition+90) * (math.pi/180)
+    local crankRads = (crankPosition+180) * (math.pi/180)
     local scale = map(math.sin(crankRads), -1, 1, 0.8, 6)
     local height = map(math.cos(crankRads), -1, 1, 20, 220)
 
