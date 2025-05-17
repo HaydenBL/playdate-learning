@@ -3,6 +3,10 @@ import "CoreLibs/graphics"
 local pd = playdate
 local gfx = pd.graphics
 
+local screenWidth, screenHeight = playdate.display.getSize()
+
+local clickPlayer = pd.sound.sampleplayer.new("sounds/selection")
+
 local fontPathsNontendo = {
     [playdate.graphics.font.kVariantNormal] = "fonts/Nontendo/Nontendo-Light",
     [playdate.graphics.font.kVariantBold] = "fonts/Nontendo/Nontendo-Bold"
@@ -11,14 +15,17 @@ local fontNontendo = gfx.font.newFamily(fontPathsNontendo)
 
 local activeIndex = 1;
 local texts = {
+    "Knack 1",
+    "Knack 2",
     "Knack 3",
     "Knack 4",
-    "Knack 5",
-    "Knack 6",
-    "Knack 7"
+    "Knack 5"
 }
+local numberOfTexts = table.getsize(texts)
 
-local degreesBetweenTexts = 360 / table.getsize(texts)
+local degreesBetweenTexts = 360 / numberOfTexts
+
+math.round = function(n) return n >= 0.0 and n-n%-1 or n-n% 1 end
 
 -- drawTextScaled yoinked from https://devforum.play.date/t/add-a-drawtextscaled-api-see-code-example/7108
 -- idk if this was added to the API since?
@@ -47,22 +54,36 @@ local function map(n, start1, stop1, start2, stop2)
     end
 end
 
-local function drawToTextWheel(text, offsetDegrees, selected)
-    local w, h = playdate.display.getSize()
-    local crankPosition = pd.getCrankPosition() + offsetDegrees
-    local crankRads = (crankPosition) * (math.pi/180)
-    local scale = map(math.sin(crankRads), -1, 1, 0.8, 6)
-    local height = map(math.cos(crankRads), -1, 1, 20, 220)
+local function drawToTextWheel(text, positionDegrees, selected)
+    local positionRads = positionDegrees * (math.pi/180)
+    local scale = map(math.sin(positionRads), -1, 1, 0.8, 6)
+    local height = map(math.cos(positionRads), -1, 1, 20, 220)
     local variant = selected and gfx.font.kVariantBold or gfx.font.kVariantNormal
-    gfx.drawTextScaled(text, w/2, height, scale, fontNontendo[variant])
+    gfx.drawTextScaled(text, screenWidth/2, height, scale, fontNontendo[variant])
+end
+
+local function getTextRotationPosition(index)
+    return (pd.getCrankPosition() + index * degreesBetweenTexts) % 360
+end
+
+local function getClosestIndexToScreen()
+    local relativeAngle = (-20 - pd.getCrankPosition()) % 360
+    return math.round((numberOfTexts * relativeAngle) / 360) % numberOfTexts + 1
 end
 
 function pd.update()
     gfx.clear()
 
+    local newActiveIndex = getClosestIndexToScreen()
+    if newActiveIndex ~= activeIndex then
+        activeIndex = newActiveIndex
+        clickPlayer:play()
+        print(activeIndex, getTextRotationPosition(activeIndex))
+    end
+    -- print(getTextRotationPosition(1), getTextRotationPosition(2), getTextRotationPosition(3), getTextRotationPosition(4), getTextRotationPosition(5), activeIndex)
+
     for i, v in ipairs(texts) do
-        local rotationPosition = i * degreesBetweenTexts
-        drawToTextWheel(v, rotationPosition, i == activeIndex)
+        drawToTextWheel(v, getTextRotationPosition(i), i == activeIndex)
     end
     
 end
