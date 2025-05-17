@@ -3,7 +3,8 @@ import "CoreLibs/graphics"
 local pd = playdate
 local gfx = pd.graphics
 
--- yoinked from https://devforum.play.date/t/add-a-drawtextscaled-api-see-code-example/7108
+-- drawTextScaled yoinked from https://devforum.play.date/t/add-a-drawtextscaled-api-see-code-example/7108
+-- idk if this was added to the API since?
 function playdate.graphics.drawTextScaled(text, x, y, scale, font)
     local padding = string.upper(text) == text and 6 or 0 -- Weird padding hack?
     local w <const> = font:getTextWidth(text)
@@ -29,15 +30,20 @@ local function map(n, start1, stop1, start2, stop2)
     end
 end
 
+local function drawToTextWheel(text, offsetDegrees)
+    local w, h = playdate.display.getSize()
+    local crankPosition = pd.getCrankPosition() + offsetDegrees
+    local crankRads = (crankPosition) * (math.pi/180)
+    local scale = map(math.sin(crankRads), -1, 1, 0.8, 6)
+    local height = map(math.cos(crankRads), -1, 1, 20, 220)
+    gfx.drawTextScaled(text, w/2, height, scale, gfx.getSystemFont())
+end
+
 function pd.update()
     gfx.clear()
 
-    local w, h = playdate.display.getSize()
-    local crankPosition = pd.getCrankPosition()
-    local crankRads = (crankPosition+180) * (math.pi/180)
-    local scale = map(math.sin(crankRads), -1, 1, 0.8, 6)
-    local height = map(math.cos(crankRads), -1, 1, 20, 220)
-
-
-    gfx.drawTextScaled("knack 3", w/2, height, scale, gfx.getSystemFont())
+    drawToTextWheel("knack 3", 90)
+    drawToTextWheel("knack 4", 180)
+    drawToTextWheel("knack 5", 270)
+    drawToTextWheel("knack 6", 0)
 end
