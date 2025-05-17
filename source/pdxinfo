@@ -1,6 +1,6 @@
-name=Text Playing
+name=Text Wheel
 author=Hayden Blaise Lueck
 description=What are words
-bundleID=se.haydenblai.text
+bundleID=se.haydenblai.textwheel
 version=1.0.0
 buildNumber=1
