@@ -34,6 +34,10 @@ function pd.update()
 
     local w, h = playdate.display.getSize()
     local crankPosition = pd.getCrankPosition()
-    local crankRads = math.sin((crankPosition+90) * (math.pi/180))
-    gfx.drawTextScaled("Hello", w/2, h/2, map(crankRads, -1, 1, 0.8, 6), gfx.getSystemFont())
+    local crankRads = (crankPosition+90) * (math.pi/180)
+    local scale = map(math.sin(crankRads), -1, 1, 0.8, 6)
+    local height = map(math.cos(crankRads), -1, 1, 20, 220)
+
+
+    gfx.drawTextScaled("knack 3", w/2, height, scale, gfx.getSystemFont())
 end
