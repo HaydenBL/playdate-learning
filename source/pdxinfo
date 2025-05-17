@@ -1,6 +1,6 @@
-name=Playdate Learning
+name=Text Playing
 author=Hayden Blaise Lueck
-description=Breakthrough gaming experience
-bundleID=se.haydenblai.capybara
+description=What are words
+bundleID=se.haydenblai.text
 version=1.0.0
 buildNumber=1
