@@ -1,6 +1,6 @@
-name=Text Wheel
+name=Hatben Learning
 author=Hayden Blaise Lueck
 description=What are words
-bundleID=se.haydenblai.textwheel
+bundleID=se.haydenblai.learning
 version=1.0.0
 buildNumber=1
