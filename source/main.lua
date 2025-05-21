@@ -1,7 +1,8 @@
 
 -- uncomment one
 -- import 'capybara-game'
-import 'text-wheel'
+-- import 'text-wheel'
+import 'easing'
 
 if playdate.update == nil then
 	playdate.update = function() end
