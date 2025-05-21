@@ -8,8 +8,8 @@ local screenWidth, screenHeight = playdate.display.getSize()
 local clickPlayer = pd.sound.sampleplayer.new("sounds/selection")
 
 local fontPathsNontendo = {
-    [playdate.graphics.font.kVariantNormal] = "fonts/Nontendo/Nontendo-Light",
-    [playdate.graphics.font.kVariantBold] = "fonts/Nontendo/Nontendo-Bold"
+    [gfx.font.kVariantNormal] = "fonts/Nontendo/Nontendo-Light",
+    [gfx.font.kVariantBold] = "fonts/Nontendo/Nontendo-Bold"
 }
 local fontNontendo = gfx.font.newFamily(fontPathsNontendo)
 
@@ -79,9 +79,10 @@ function pd.cranked(change, acceleratedChange)
     end
 end
 
+activeIndex = getClosestIndexToScreen()
+
 function pd.update()
     gfx.clear()
-
     for i, v in ipairs(texts) do
         drawToTextWheel(v, getTextRotationPosition(i), i == activeIndex)
     end
